@@ -38,9 +38,13 @@
 #endif
 
 class LowPower_ {
+    private:
+        uint32_t _originalClockSettings;
+
     public:
         void enterSleepMode();
         void enterIdleMode();
+        void sleepWithTheDog();
 
         // Peripheral Module Disable - only does anything on PPS parts.
         void disableADC();
@@ -111,6 +115,10 @@ class LowPower_ {
         void enableAllPeripherals();
 
         void snooze(unsigned long ms);
+
+        bool switchToLPRC();
+        bool isRunningFromLPRC();
+        void restoreSystemClock();
 };
 
 extern LowPower_ LowPower;

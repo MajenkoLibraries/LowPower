@@ -443,6 +443,11 @@ static void __USER_ISR _timerWakeup() {
 
 void LowPower_::snooze(unsigned long ms) {
     uint32_t f_pb = getPeripheralClock();
+
+    if (switchToLPRC()) {
+        f_pb = 31250;
+    }
+
     float baseclock = f_pb;
     uint8_t ps = 0;
 
@@ -538,4 +543,44 @@ void LowPower_::snooze(unsigned long ms) {
     T4CON = tcon4;
     PR4 = tpr4;
     TMR4 = tmr4;
+    restoreSystemClock();
+}
+
+bool LowPower_::switchToLPRC() {
+    int i = disableInterrupts();
+    _originalClockSettings = OSCCONbits.COSC;
+    SYSKEY = 0x0;
+    SYSKEY = 0xAA996655;
+    SYSKEY = 0x556699AA;
+    OSCCONbits.NOSC = 0b101;
+    OSCCONbits.OSWEN = 1;
+    SYSKEY = 0x0;
+    restoreInterrupts(i);
+    while (OSCCONbits.OSWEN == 1);
+    return (OSCCONbits.COSC == 0b101);
+}
+
+void LowPower_::restoreSystemClock() {
+    int i = disableInterrupts();
+    SYSKEY = 0x0;
+    SYSKEY = 0xAA996655;
+    SYSKEY = 0x556699AA;
+    OSCCONbits.NOSC = _originalClockSettings;
+    OSCCONbits.OSWEN = 1;
+    SYSKEY = 0x0;
+    restoreInterrupts(i);
+    while (OSCCONbits.OSWEN == 1);
+} 
+
+bool LowPower_::isRunningFromLPRC() {
+    return (OSCCONbits.COSC == 0b101);
+}
+
+void LowPower_::sleepWithTheDog() {
+    WDTCONSET = 1<<15; // Turn on
+    WDTCONSET = 0x01; // Kick the dog!
+    int r = disableInterrupts();
+    enterSleepMode();
+    restoreInterrupts(r);
+    WDTCONCLR = 1<<15; // Turn off
 }
