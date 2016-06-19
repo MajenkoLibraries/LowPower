@@ -415,6 +415,17 @@ void LowPower_::disableAllPeripherals() {
 #endif
 }
 
+void LowPower_::disableAllPeripheralsExceptUSB() {
+#ifdef __PIC32_PPS__
+    PMD0 = 0xFFFFFFFFUL;
+    PMD1 = 0xFFFFFFFFUL;
+    PMD2 = 0xFFFFFFFFUL;
+    PMD3 = 0xFFFFFFFFUL;
+    PMD4 = 0xFFFFFFFFUL;
+    PMD5 = 0xFEFFFFFFUL;
+#endif
+}
+
 void LowPower_::enableAllPeripherals() {
 #ifdef __PIC32_PPS__
     PMD0 = 0x00000000UL;
@@ -507,6 +518,9 @@ void LowPower_::snooze(unsigned long ms) {
     
     TMR4 = 0;
     TMR5 = 0;
+    // If we're going to do this we need to ensure the two timers are enabled!
+    enableTimer4();
+    enableTimer5();
 
     int cten = clearIntEnable(_CORE_TIMER_IRQ);
     T4CONbits.TON = 1;

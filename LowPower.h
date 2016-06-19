@@ -107,6 +107,7 @@ class LowPower_ {
         void enableParallelMasterPort();
 
         void disableAllPeripherals();
+        void disableAllPeripheralsExceptUSB();
         void enableAllPeripherals();
 
         void snooze(unsigned long ms);
