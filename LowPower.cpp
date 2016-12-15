@@ -406,7 +406,6 @@ void LowPower_::enableParallelMasterPort() {
 
 void LowPower_::disableAllPeripherals() {
 #ifdef __PIC32_PPS__
-    PMD0 = 0xFFFFFFFFUL;
     PMD1 = 0xFFFFFFFFUL;
     PMD2 = 0xFFFFFFFFUL;
     PMD3 = 0xFFFFFFFFUL;
@@ -417,7 +416,6 @@ void LowPower_::disableAllPeripherals() {
 
 void LowPower_::disableAllPeripheralsExceptUSB() {
 #ifdef __PIC32_PPS__
-    PMD0 = 0xFFFFFFFFUL;
     PMD1 = 0xFFFFFFFFUL;
     PMD2 = 0xFFFFFFFFUL;
     PMD3 = 0xFFFFFFFFUL;
@@ -428,7 +426,6 @@ void LowPower_::disableAllPeripheralsExceptUSB() {
 
 void LowPower_::enableAllPeripherals() {
 #ifdef __PIC32_PPS__
-    PMD0 = 0x00000000UL;
     PMD1 = 0x00000000UL;
     PMD2 = 0x00000000UL;
     PMD3 = 0x00000000UL;
