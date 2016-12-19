@@ -1,0 +1,20 @@
+Source: lowpower
+Section: libraries
+XBSC-Family: pic32
+Priority: extra
+Maintainer: Matt Jenkins <matt@majenko.co.uk>
+XBSC-TieCore: chipkit
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.4
+
+Package: liblowpower-chipkit
+Section: libraries
+Architecture: all
+XBSC-Group: Misc
+Depends: chipkit
+Provides: LowPower.h
+Description: LowPower library for chipkit
+ Power saving functions for chipKIT boards.
+
+
+
